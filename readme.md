@@ -298,6 +298,8 @@ ok
 
 Inspecting pidstat zstd compressed logs
 
+At public_html backup stage
+
 ```
 zstdcat /home/backup-accounts/logs/backup_pidstat_stats_020719-233152.log.zst
 Linux 3.10.0-957.21.3.el7.x86_64 (cpanelhost.domain.com)      07/02/2019      _x86_64_        (2 CPU)
@@ -311,6 +313,21 @@ Linux 3.10.0-957.21.3.el7.x86_64 (cpanelhost.domain.com)      07/02/2019      _x
  1562110313     0     21143    0.97   13.59    0.00   14.56     0    830.10      0.00  123532   1312   0.13  23840.78      0.00      0.00  tar cpf - public_html 
  1562110313     0     21144  100.00    0.97    0.00  100.00     0   8762.14      0.00  234432  35032   3.45      0.00   5231.07      0.00  zstd -6 -T2 -f --rsyncable 
 
+```
+
+At start of mysql database backup stage via mysqldump
+
+```
+#      Time   UID       PID    %usr %system  %guest    %CPU   CPU  minflt/s  majflt/s     VSZ    RSS   %MEM   kB_rd/s   kB_wr/s kB_ccwr/s  Command
+ 1562110331     0      1264    0.00    1.00    0.00    1.00     0      0.00      0.00       0      0   0.00      0.00  19368.00      0.00  jbd2/vda1-8
+ 1562110331     0      1707    0.00    0.00    0.00    0.00     0      0.00      0.00   55572    180   0.02      0.00      4.00      0.00  /sbin/auditd 
+ 1562110331     0      2201    0.00    0.00    0.00    0.00     1      2.00      0.00   21584    408   0.04      0.00      0.00      0.00  /usr/sbin/irqbalance --foreground 
+ 1562110331   997      4592   25.00    4.00    0.00   29.00     0   1019.00      7.00  517624  60604   5.97  37008.00   1784.00   1784.00  /usr/sbin/mysqld 
+ 1562110331     0     21125    0.00    0.00    0.00    0.00     0    393.00      0.00  113704   1600   0.16   4996.00      8.00      0.00  /bin/bash /root/tools/cpanel-backup.sh cpuser1 
+ 1562110331     0     21126    0.00    0.00    0.00    0.00     0      0.00      0.00  107952    672   0.07      0.00      4.00      0.00  tee /home/backup-accounts/logs/cpanel-backup-020719-233152.log 
+ 1562110331     0     21128    0.00    1.00    0.00    1.00     1    330.00      0.00  108184   1128   0.11      0.00      0.00      0.00  pidstat -durhl 1 
+ 1562110331     0     21132    0.00    0.00    0.00    0.00     0     38.00      0.00  113244    996   0.10      0.00      8.00      0.00  sadc 1 -z -S ALL /home/backup-accounts/logs/backup_sar_stats_020719-233152 
+ 1562110331     0     21396   24.00    2.00    0.00   26.00     0   1824.00      1.00   54284   4924   0.49   3980.00      0.00      0.00  mysqldump --default-character-set=utf8 -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers
 ```
 
 Inspecting sar recorded resource usage
