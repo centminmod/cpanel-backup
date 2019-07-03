@@ -46,6 +46,18 @@ mysql database backup using zstd level 3 compression
 
 `cpanel-backup.sh` preview for single cpanel user backup mode to back cpanel user = `cpuser1` with alias domain name, cPanel username and database name masking enabled only for Slack channel notifictaions (script outputs the real names) and default zstd compression algorithm used and zstd compressed logs.
 
+where `/home/cpuser1` size wise is ~1.1GB for files and ~1.2GB for MySQL databases
+
+```
+du -s /home/cpuser1 
+1057152 /home/cpuser1
+
+du -s /var/lib/mysql/cpuser1*
+1204552 /var/lib/mysql/cpuser1_db1
+8       /var/lib/mysql/cpuser1_db2
+8       /var/lib/mysql/cpuser1_db3
+```
+
 ```
 /root/tools/cpanel-backup.sh cpuser1
 
