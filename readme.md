@@ -14,7 +14,7 @@
 * For cPanel log files if you opt to back them up, `cpanel-backup.sh` will conditionally reduce zstd compression level to lowest negative 10 (--fast=10) levels to not waste time if the script detects there are already a mix of compressed & uncompressed version of your logs (due to logrotate). FYI, zstd has compression levels from fastest to slowest (smallest compressed file size) from -10 to 19 and then 3 ultra levels 20-22.
 * `cpanel-backup.sh` will support backing up all cpanel user accounts in same session as well as per cpanel user account backups on command line.
 * `cpanel-backup.sh` will support alias name masking for domain name, username and database name to allow you to publicly demo Slack notifications on live cPanel user data but still keep actual domain name, username, and database names private.
-* `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains and parked domains.
+* `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains and parked domains as well as cronjobs.
 * `cpanel-backup.sh` will also optionally sending slack channel notifications on successful or failed backup targets i.e. public_html, mail, logs, ssl or database backups. All notifications are colour coded - green = successful or red = failed for backup status for each backup target. This allows quick visual inspection of which backup targets failed their backup runs.
 
 # slack channel notifictaions
@@ -126,33 +126,45 @@ domain1.info
 
 --------------------------------------------------------
 domain mapping saved:
-/home/backup-accounts/cpuser1/domain-map-cpuser1-030719-072540.txt
+/home/backup-accounts/cpuser1/domain-map-cpuser1-030719-074932.txt
+--------------------------------------------------------
+
+--------------------------------------------------------
+list cpuser1 cronjobs
+--------------------------------------------------------
+
+#SHELL="/usr/local/cpanel/bin/jailshell"
+#*/15 * * * * echo "dummy cronjob"
+
+--------------------------------------------------------
+cpuser1 cronjobs saved:
+/home/backup-accounts/cpuser1/cronjobs-cpuser1-030719-074932.txt
 --------------------------------------------------------
 
 --------------------------------------------------------
 backup cpanel /home/cpuser1/public_html web root
 --------------------------------------------------------
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - public_html | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/public_html-cpuser1-020719-233152.tar.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - public_html | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/public_html-cpuser1-030719-074932.tar.zst"
 
-backup start time: Tue Jul  2 23:31:52 UTC 2019
-backup end time: Tue Jul  2 23:31:54 UTC 2019
-backup time: 1.611
+backup start time: Wed Jul  3 07:49:32 UTC 2019
+backup end time: Wed Jul  3 07:49:33 UTC 2019
+backup time: 1.092
 zstd normal compression mode: enabled
 compression level: 6
-compression ratio: 2.193 (22470527 / 10246463)
-compression ratio: 0.455 (10246463 / 22470527)
+compression ratio: 2.071 (22470527 / 10849889)
+compression ratio: 0.482 (10849889 / 22470527)
 slack notification sending
 ok
 
 --------------------------------------------------------
 backup cpanel /home/cpuser1/mail directory
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - mail | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mail-cpuser1-020719-233152.tar.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - mail | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mail-cpuser1-030719-074932.tar.zst"
 
-backup start time: Tue Jul  2 23:31:55 UTC 2019
-backup end time: Tue Jul  2 23:31:55 UTC 2019
-backup time: 0.011
+backup start time: Wed Jul  3 07:49:34 UTC 2019
+backup end time: Wed Jul  3 07:49:34 UTC 2019
+backup time: 0.007
 zstd normal compression mode: enabled
 compression level: 6
 compression ratio: 81.681 (24586 / 301)
@@ -163,26 +175,26 @@ ok
 --------------------------------------------------------
 backup cpanel /home/cpuser1/logs directory
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - logs | zstd -1 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/logs-cpuser1-020719-233152.tar.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - logs | zstd -1 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/logs-cpuser1-030719-074932.tar.zst"
 
-backup start time: Tue Jul  2 23:31:55 UTC 2019
-backup end time: Tue Jul  2 23:32:09 UTC 2019
-backup time: 13.127
+backup start time: Wed Jul  3 07:49:34 UTC 2019
+backup end time: Wed Jul  3 07:49:47 UTC 2019
+backup time: 12.911
 zstd normal compression mode: enabled
 compression level: 1
-compression ratio: 12.733 (1049492951 / 82422177)
-compression ratio: 0.078 (82422177 / 1049492951)
+compression ratio: 12.703 (1049492951 / 82612324)
+compression ratio: 0.078 (82612324 / 1049492951)
 slack notification sending
 ok
 
 --------------------------------------------------------
 backup cpanel /home/cpuser1/ssl directory
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - ssl | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/ssl-cpuser1-020719-233152.tar.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 tar cpf - ssl | zstd -6 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/ssl-cpuser1-030719-074932.tar.zst"
 
-backup start time: Tue Jul  2 23:32:09 UTC 2019
-backup end time: Tue Jul  2 23:32:09 UTC 2019
-backup time: 0.010
+backup start time: Wed Jul  3 07:49:47 UTC 2019
+backup end time: Wed Jul  3 07:49:47 UTC 2019
+backup time: 0.017
 zstd normal compression mode: enabled
 compression level: 6
 compression ratio: 46.545 (4096 / 88)
@@ -219,39 +231,39 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREA
 
 backup cpanel user's mysql databases
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db1" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db1-020719-233152.sql.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db1" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db1-030719-074932.sql.zst"
 
-backup start time: Tue Jul  2 23:32:10 UTC 2019
-backup end time: Tue Jul  2 23:32:47 UTC 2019
-backup time: 37.158
+backup start time: Wed Jul  3 07:49:49 UTC 2019
+backup end time: Wed Jul  3 07:50:27 UTC 2019
+backup time: 38.182
 zstd normal compression mode: enabled
-compression level: -3
-compression ratio: 4.309 (1232429907 / 285958928)
-compression ratio: 0.232 (285958928 / 1232429907)
+compression level: 3
+compression ratio: 4.239 (1232429907 / 290671454)
+compression ratio: 0.235 (290671454 / 1232429907)
 slack notification sending
 ok
 
-/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 --single-transaction -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db2" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db2-020719-233152.sql.zst"
+/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 --single-transaction -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db2" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db2-030719-074932.sql.zst"
 
-backup start time: Tue Jul  2 23:32:48 UTC 2019
-backup end time: Tue Jul  2 23:32:48 UTC 2019
-backup time: 0.014
+backup start time: Wed Jul  3 07:50:27 UTC 2019
+backup end time: Wed Jul  3 07:50:27 UTC 2019
+backup time: 0.018
 zstd normal compression mode: enabled
-compression level: -3
-compression ratio: 7.873 (4157 / 528)
-compression ratio: 0.127 (528 / 4157)
-slack notification sending
-ok
-
-/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 --single-transaction -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db3" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db3-020719-233152.sql.zst"
-
-backup start time: Tue Jul  2 23:32:49 UTC 2019
-backup end time: Tue Jul  2 23:32:49 UTC 2019
-backup time: 0.012
-zstd normal compression mode: enabled
-compression level: -3
+compression level: 3
 compression ratio: 7.858 (4157 / 529)
 compression ratio: 0.127 (529 / 4157)
+slack notification sending
+ok
+
+/bin/nice -n 12 /bin/ionice -c2 -n7 mysqldump --default-character-set=utf8 --single-transaction -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers --hex-blob "cpuser1_db3" | zstd -3 -T2 -f --rsyncable > "/home/backup-accounts/cpuser1/mysqlbackup-cpuser1_db3-030719-074932.sql.zst"
+
+backup start time: Wed Jul  3 07:50:28 UTC 2019
+backup end time: Wed Jul  3 07:50:28 UTC 2019
+backup time: 0.012
+zstd normal compression mode: enabled
+compression level: 3
+compression ratio: 7.873 (4157 / 528)
+compression ratio: 0.127 (528 / 4157)
 slack notification sending
 ok
 
@@ -259,103 +271,106 @@ ok
 List cpuser1 backups at /home/backup-accounts/cpuser1
 --------------------------------------------------------
 
--rw-r--r--. 1 root root 9.8M Jul  2 23:31 public_html-cpuser1-020719-233152.tar.zst
--rw-r--r--. 1 root root  301 Jul  2 23:31 mail-cpuser1-020719-233152.tar.zst
--rw-r--r--. 1 root root  79M Jul  2 23:32 logs-cpuser1-020719-233152.tar.zst
--rw-r--r--. 1 root root   88 Jul  2 23:32 ssl-cpuser1-020719-233152.tar.zst
--rw-r--r--. 1 root root  835 Jul  2 23:32 mysql-grants-020719-233152.log
--rw-r--r--. 1 root root  861 Jul  2 23:32 mysql-grants-ssh-020719-233152.log
--rw-r--r--. 1 root root 273M Jul  2 23:32 mysqlbackup-cpuser1_db1-020719-233152.sql.zst
--rw-r--r--. 1 root root  528 Jul  2 23:32 mysqlbackup-cpuser1_db2-020719-233152.sql.zst
--rw-r--r--. 1 root root  529 Jul  2 23:32 mysqlbackup-cpuser1_db3-020719-233152.sql.zst
+-rw-r--r--. 1 root root  190 Jul  3 07:49 domain-map-cpuser1-030719-074932.json
+-rw-r--r--. 1 root root  447 Jul  3 07:49 domain-map-cpuser1-030719-074932.txt
+-rw-r--r--. 1 root root   76 Jul  3 07:49 cronjobs-cpuser1-030719-074932.txt
+-rw-r--r--. 1 root root  11M Jul  3 07:49 public_html-cpuser1-030719-074932.tar.zst
+-rw-r--r--. 1 root root  301 Jul  3 07:49 mail-cpuser1-030719-074932.tar.zst
+-rw-r--r--. 1 root root  79M Jul  3 07:49 logs-cpuser1-030719-074932.tar.zst
+-rw-r--r--. 1 root root   88 Jul  3 07:49 ssl-cpuser1-030719-074932.tar.zst
+-rw-r--r--. 1 root root  835 Jul  3 07:49 mysql-grants-030719-074932.log
+-rw-r--r--. 1 root root  861 Jul  3 07:49 mysql-grants-ssh-030719-074932.log
+-rw-r--r--. 1 root root 278M Jul  3 07:50 mysqlbackup-cpuser1_db1-030719-074932.sql.zst
+-rw-r--r--. 1 root root  529 Jul  3 07:50 mysqlbackup-cpuser1_db2-030719-074932.sql.zst
+-rw-r--r--. 1 root root  528 Jul  3 07:50 mysqlbackup-cpuser1_db3-030719-074932.sql.zst
 
 
 --------------------------------------------------------
 pidstat stats saved at:
-/home/backup-accounts/logs/backup_pidstat_stats_020719-233152.log.zst
+/home/backup-accounts/logs/backup_pidstat_stats_030719-074932.log.zst
 --------------------------------------------------------
 read command:
-zstdcat /home/backup-accounts/logs/backup_pidstat_stats_020719-233152.log.zst
+zstdcat /home/backup-accounts/logs/backup_pidstat_stats_030719-074932.log.zst
 --------------------------------------------------------
 sar usage stats saved at:
-/home/backup-accounts/logs/backup_sar_stats_020719-233152
+/home/backup-accounts/logs/backup_sar_stats_030719-074932
 --------------------------------------------------------
 read via sar command:
 
 cpu load avg
 
-sar -q -f /home/backup-accounts/logs/backup_sar_stats_020719-233152 | sed -e "s|$(hostname)|hostname|g"
+sar -q -f /home/backup-accounts/logs/backup_sar_stats_030719-074932 | sed -e "s|$(hostname)|hostname|g"
 
-11:31:52 PM   runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
-Average:            3       147      1.03      0.31      0.24         0
+07:49:32 AM   runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            3       149      1.18      0.53      0.34         0
 
 1min 5min 15min min:
-0.00 0.06 0.16
+0.66 0.38 0.29
 1min 5min 15min avg:
-1.03 0.31 0.24
+1.18 0.53 0.34
 1min 5min 15min max:
-1.75 0.53 0.31
+1.58 0.67 0.39
 1min 5min 15min 95%:
-1.75 0.53 0.31
+1.58 0.67 0.39
 
 cpu utilisation
 
-sar -u -f /home/backup-accounts/logs/backup_sar_stats_020719-233152 | sed -e "s|$(hostname)|hostname|g"
+sar -u -f /home/backup-accounts/logs/backup_sar_stats_030719-074932 | sed -e "s|$(hostname)|hostname|g"
 
-11:31:52 PM     CPU     %user     %nice   %system   %iowait    %steal     %idle
-Average:        all     68.77      7.07      3.61      4.29      0.07     16.19
+07:49:32 AM     CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all     71.93      7.03      3.79      3.45      0.11     13.70
 
 %user %nice %system $iowait %steal %idle min:
-0.50 0.00 0.50 0.00 0.00 0.00
+0.50 0.00 1.01 0.00 0.00 0.51
 %user %nice %system $iowait %steal %idle avg:
-68.80 7.07 3.62 4.26 0.07 16.18
+71.90 7.03 3.78 3.50 0.11 13.67
 %user %nice %system $iowait %steal %idle max:
-91.50 16.58 8.33 40.40 0.53 99.00
+88.72 16.08 8.50 45.56 2.11 98.49
 %user %nice %system $iowait %steal %idle 95%:
-88.51 15.81 6.61 28.31 0.51 92.13
+86.19 14.10 7.60 23.03 0.51 50.08
 
 memory usage
 
-sar -r -f /home/backup-accounts/logs/backup_sar_stats_020719-233152 | sed -e "s|$(hostname)|hostname|g"
+sar -r -f /home/backup-accounts/logs/backup_sar_stats_030719-074932 | sed -e "s|$(hostname)|hostname|g"
 
-11:31:52 PM kbmemfree kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
-Average:       101801    912935     89.97    130308    377143   1367578     66.28    302071    472112     20589
+07:49:32 AM kbmemfree kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
+Average:       104806    909930     89.67      5111    521963   1341613     65.02    163282    610393     22965
 
 kbmemfree kbmemused %memused kbbuffers kbcached kbcommit %commit kbactive kbinact kbdirty min:
-69592.00 874056.00 86.14 130232.00 314356.00 1278800.00 61.98 235400.00 411972.00 592.00
+69344.00 730388.00 71.98 3920.00 363360.00 1281136.00 62.09 103348.00 469116.00 152.00
 kbmemfree kbmemused %memused kbbuffers kbcached kbcommit %commit kbactive kbinact kbdirty avg:
-101800.83 912935.17 89.97 130307.66 377143.10 1367578.00 66.28 302071.10 472112.14 20589.17
+104805.54 909930.46 89.67 5110.60 521962.60 1341613.40 65.02 163281.96 610393.05 22965.40
 kbmemfree kbmemused %memused kbbuffers kbcached kbcommit %commit kbactive kbinact kbdirty max:
-140680.00 945144.00 93.14 130720.00 452252.00 1428484.00 69.23 358248.00 553476.00 36432.00
+284348.00 945392.00 93.17 11764.00 580252.00 1385032.00 67.13 299280.00 695104.00 43036.00
 kbmemfree kbmemused %memused kbbuffers kbcached kbcommit %commit kbactive kbinact kbdirty 95%:
-131916.00 936719.00 92.31 130708.00 437348.20 1426468.00 69.14 358094.40 537221.40 33403.60
+127985.60 942773.60 92.91 9716.80 574115.20 1383176.00 67.04 295902.40 676940.00 36974.40
 
 disk I/O usage
 
-sar -d -f /home/backup-accounts/logs/backup_sar_stats_020719-233152 | sed -e "s|$(hostname)|hostname|g"
+sar -d -f /home/backup-accounts/logs/backup_sar_stats_030719-074932 | sed -e "s|$(hostname)|hostname|g"
 
-11:31:52 PM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
-Average:     dev253-0    202.15  67822.85  12029.73    395.02      0.34      1.72      0.29      5.93
+07:49:32 AM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
+Average:     dev253-0    226.94  69486.33  12471.76    361.14      0.31      1.41      0.25      5.59
 
 tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util min:
-1.00 1.00 0.00 0.00 8.00 0.00 0.00 0.00
+7.00 7.00 624.00 0.00 13.68 0.00 0.05 0.04
 tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util avg:
-202.55 202.55 67877.05 12043.87 668.44 0.34 3.24 0.54
+226.79 226.79 69285.40 12513.68 670.20 0.31 2.78 0.45
 tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util max:
-2844.00 2844.00 194669.31 81768.00 940.42 1.43 32.53 4.56
+4717.00 4717.00 196608.00 87168.00 936.93 0.83 14.59 3.29
 tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util 95%:
-566.65 566.65 180224.00 69632.00 910.22 0.86 4.94 1.16
+445.80 445.80 181660.80 75652.80 910.22 0.71 4.92 0.60
 
 --------------------------------------------------------
 /root/tools/cpanel-backup.sh run log saved at:
-/home/backup-accounts/logs/cpanel-backup-020719-233152.log.zst
+/home/backup-accounts/logs/cpanel-backup-030719-074932.log.zst
 --------------------------------------------------------
 read command:
-zstdcat /home/backup-accounts/logs/cpanel-backup-020719-233152.log.zst
+zstdcat /home/backup-accounts/logs/cpanel-backup-030719-074932.log.zst
 --------------------------------------------------------
 backup completed
 --------------------------------------------------------
-total cpanel backup time: 59.582 seconds
+total cpanel backup time: 58.336 seconds
 
 slack notification sending
 ok
