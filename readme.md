@@ -441,3 +441,17 @@ cat /home/backup-accounts/logs/sar-cpuload-data-formatted-020719-233152.log
 1min 5min 15min 95%:
 1.75 0.53 0.31
 ```
+
+sar disk I/O usage extended stats for min, avg, max and 95% percentile values
+
+```
+cat /home/backup-accounts/logs/sar-disk-data-formatted-030719-002643.log
+tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util min:
+0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util avg:
+166.84 166.84 132239.08 9618.89 790.93 0.66 3.63 0.56
+tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util max:
+279.00 279.00 194312.87 57968.00 914.07 2.34 11.32 1.06
+tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util 95%:
+231.06 231.06 181390.35 55487.20 910.22 1.20 5.81 0.88
+```
