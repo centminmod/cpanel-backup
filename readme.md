@@ -6,7 +6,7 @@
 
 * `cpanel-backup.sh` will have features from [dbbackup.sh](https://community.centminmod.com/threads/dbbackup-sh-quick-mysql-database-backups-for-centmin-mod-stack.4573/) including conditional db character set detection & 
   pure innodb database detection for conditional single-transaction options and using nice/ionice for tar backups. 
-* `cpanel-backup.sh` will also have sar & pidstat cpu, memory and disk usage stats recorded allowing you to fine tune your backup and compression parameters for your specific server and backup requirements.
+* `cpanel-backup.sh` will also have sar & pidstat cpu, memory and disk usage stats recorded allowing you to fine tune your backup and compression parameters for your specific server and backup requirements i.e. lower memory & cpu usage.
 * pidstat logs and backup logs also also zstd level 1 compressed to save space.
 * `cpanel-backup.sh` will support the following compression algorithms, gzip via multi-threaded pigz, xz via multi-threaded pxz and zstd ([zstd is the default due to speed and compression ration performance](https://community.centminmod.com/threads/round-3-compression-comparison-benchmarks-zstd-vs-brotli-vs-pigz-vs-bzip2-vs-xz-etc.17259/))
 * `cpanel-backup.sh` compression algorithm level settings have finer granular control on a per backup target basis, so public_html, mail, logs, ssl or database backup targets each have their own compression level control so you can optimise compression speed and compressed file size as well as control the amount of server resources used (cpu, memory etc)
@@ -14,6 +14,7 @@
 * For cPanel log files if you opt to back them up, `cpanel-backup.sh` will conditionally reduce zstd compression level to lowest negative 10 (--fast=10) levels to not waste time if the script detects there are already a mix of compressed & uncompressed version of your logs (due to logrotate). FYI, zstd has compression levels from fastest to slowest (smallest compressed file size) from -10 to 19 and then 3 ultra levels 20-22.
 * `cpanel-backup.sh` will support backing up all cpanel user accounts in same session as well as per cpanel user account backups on command line.
 * `cpanel-backup.sh` will support alias name masking for domain name, username and database name to allow you to publicly demo Slack notifications on live cPanel user data but still keep actual domain name, username, and database names private.
+* `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains and parked domains.
 * `cpanel-backup.sh` will also optionally sending slack channel notifications on successful or failed backup targets i.e. public_html, mail, logs, ssl or database backups. All notifications are colour coded - green = successful or red = failed for backup status for each backup target. This allows quick visual inspection of which backup targets failed their backup runs.
 
 # slack channel notifictaions
@@ -83,7 +84,7 @@ du -s /var/lib/mysql/cpuser1*
 /root/tools/cpanel-backup.sh cpuser1
 
 --------------------------------------------------------
-cPanel/WHM backup script 0.5
+cPanel/WHM backup script 0.6
 for data migration to Centmin Mod LEMP stack imports
 written by George Liu (centminmod.com)
 --------------------------------------------------------
@@ -93,6 +94,40 @@ list cpanel users
 --------------------------------------------------------
 
 cpuser1
+
+--------------------------------------------------------
+list cpuser1 domain mapping
+--------------------------------------------------------
+
+{
+  "parked_domains": [
+    "domain1.biz",
+    "domain1.info"
+  ],
+  "addon_domains": {},
+  "main_domain": "domain1.com",
+  "sub_domains": [
+    "ads.domain1.com",
+    "m.domain1.com"
+  ]
+}
+
+main_domain=domain1.com
+
+sub_domains:
+
+ads.domain1.com
+m.domain1.com
+
+parked_domains:
+
+domain1.biz
+domain1.info
+
+--------------------------------------------------------
+domain mapping saved:
+/home/backup-accounts/cpuser1/domain-map-cpuser1-030719-072540.txt
+--------------------------------------------------------
 
 --------------------------------------------------------
 backup cpanel /home/cpuser1/public_html web root
