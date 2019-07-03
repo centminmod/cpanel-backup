@@ -293,25 +293,24 @@ ok
 List cpuser1 backups at /home/backup-accounts/cpuser1
 --------------------------------------------------------
 
-+-- [         76]  cronjobs-cpuser1-030719-185011.txt
-+-- [        190]  domain-map-cpuser1-030719-185011.json
-+-- [        533]  domain-map-cpuser1-030719-185011.txt
-+-- [   82422177]  logs-cpuser1-030719-185011.tar.zst
-+-- [        301]  mail-cpuser1-030719-185011.tar.zst
-+-- [  285958928]  mysqlbackup-cpuser1_db1-030719-185011.sql.zst
-+-- [        528]  mysqlbackup-cpuser1_db2-030719-185011.sql.zst
-+-- [        528]  mysqlbackup-cpuser1_db3-030719-185011.sql.zst
-+-- [        835]  mysql-grants-030719-185011.log
-+-- [        861]  mysql-grants-ssh-030719-185011.log
-+-- [       4096]  named
-|   +-- [          0]  ads.domain1.com.db
-|   +-- [          0]  domain1.biz.db
-|   +-- [          0]  domain1.com.db
-|   +-- [          0]  domain1.info.db
-|   +-- [          0]  m.domain1.com.db
-+-- [   10246463]  public_html-cpuser1-030719-185011.tar.zst
-+-- [         88]  ssl-cpuser1-030719-185011.tar.zst
-
++-- [  76]  cronjobs-cpuser1-030719-185011.txt
++-- [ 190]  domain-map-cpuser1-030719-185011.json
++-- [ 533]  domain-map-cpuser1-030719-185011.txt
++-- [ 79M]  logs-cpuser1-030719-185011.tar.zst
++-- [ 301]  mail-cpuser1-030719-185011.tar.zst
++-- [273M]  mysqlbackup-cpuser1_db1-030719-185011.sql.zst
++-- [ 528]  mysqlbackup-cpuser1_db2-030719-185011.sql.zst
++-- [ 528]  mysqlbackup-cpuser1_db3-030719-185011.sql.zst
++-- [ 835]  mysql-grants-030719-185011.log
++-- [ 861]  mysql-grants-ssh-030719-185011.log
++-- [4.0K]  named
+|   +-- [   0]  ads.domain1.com.db
+|   +-- [   0]  domain1.biz.db
+|   +-- [   0]  domain1.com.db
+|   +-- [   0]  domain1.info.db
+|   +-- [   0]  m.domain1.com.db
++-- [9.8M]  public_html-cpuser1-030719-185011.tar.zst
++-- [  88]  ssl-cpuser1-030719-185011.tar.zst
 
 --------------------------------------------------------
 pidstat stats saved at:
