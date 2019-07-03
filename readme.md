@@ -42,6 +42,12 @@ mysql database backup using zstd level 3 compression
 
 ![](/screenshots/cpanel-backup.sh-slack-cpuser1-mysql-aliasmasked-01.png)
 
+## failed backup notifications
+
+Example of failed mysql backup with alias db name masking enabled. Colour coded Slack notification, red = failed backup
+
+![](/screenshots/cpanel-backup.sh-slack-cpuser1-mysql-aliasmasked-failed-01.png)
+
 # raw output example
 
 `cpanel-backup.sh` preview for single cpanel user backup mode to back cpanel user = `cpuser1` with alias domain name, cPanel username and database name masking enabled only for Slack channel notifictaions (script outputs the real names) and default zstd compression algorithm used and zstd compressed logs.
