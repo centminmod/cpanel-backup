@@ -17,7 +17,7 @@
 * `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains and parked domains as well as cronjobs.
 * `cpanel-backup.sh` will also optionally sending slack channel notifications on successful or failed backup targets i.e. public_html, mail, logs, ssl or database backups. All notifications are colour coded - green = successful or red = failed for backup status for each backup target. This allows quick visual inspection of which backup targets failed their backup runs.
 
-# slack channel notifictaions
+# slack channel notifications
 
 cpanel user = cpuser1 public_html backup
 
@@ -51,7 +51,7 @@ Example of failed mysql backup with alias db name masking enabled. Colour coded 
 
 # raw output example
 
-`cpanel-backup.sh` preview for single cpanel user backup mode to back cpanel user = `cpuser1` with alias domain name, cPanel username and database name masking enabled only for Slack channel notifictaions (script outputs the real names) and default zstd compression algorithm used and zstd compressed logs.
+`cpanel-backup.sh` preview for single cpanel user backup mode to back cpanel user = `cpuser1` with alias domain name, cPanel username and database name masking enabled only for Slack channel notifications (script outputs the real names) and default zstd compression algorithm used and zstd compressed logs.
 
 with all backup targets enabled for public_html, logs, mail, mysql and ssl
 
