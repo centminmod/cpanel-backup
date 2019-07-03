@@ -59,7 +59,6 @@ BACKUP_MYSQL='y'
 BACKUP_LOGS='y'
 # backup /home/username/ssl
 BACKUP_SSL='y'
-
 ```
 
 where `/home/cpuser1` size wise is ~1.1GB for files and ~1.2GB for MySQL databases
@@ -356,6 +355,7 @@ At start of mysql database backup stage via mysqldump
  1562110331     0     21128    0.00    1.00    0.00    1.00     1    330.00      0.00  108184   1128   0.11      0.00      0.00      0.00  pidstat -durhl 1 
  1562110331     0     21132    0.00    0.00    0.00    0.00     0     38.00      0.00  113244    996   0.10      0.00      8.00      0.00  sadc 1 -z -S ALL /home/backup-accounts/logs/backup_sar_stats_020719-233152 
  1562110331     0     21396   24.00    2.00    0.00   26.00     0   1824.00      1.00   54284   4924   0.49   3980.00      0.00      0.00  mysqldump --default-character-set=utf8 -Q -K --max_allowed_packet=256M --net_buffer_length=65536 --routines --events --triggers
+ 1562110331     0     21397   90.00    3.00    0.00   93.00     0   9848.00      0.00  211320  38196   3.76      0.00   4320.00      0.00  zstd -3 -T2 -f --rsyncable 
 ```
 
 Inspecting sar recorded resource usage
