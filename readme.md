@@ -16,6 +16,7 @@
 * `cpanel-backup.sh` will support alias name masking for domain name, username and database name to allow you to publicly demo Slack notifications on live cPanel user data but still keep actual domain name, username, and database names private.
 * `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains, parked domains, git repositories, cronjobs and DNS zone files if they exist.
 * `cpanel-backup.sh` will also optionally sending slack channel notifications on successful or failed backup targets i.e. public_html, mail, logs, ssl or database backups. All notifications are colour coded - green = successful or red = failed for backup status for each backup target. This allows quick visual inspection of which backup targets failed their backup runs.
+* `cpanel-backup.sh` optionally can upload backed up files to [BackBlaze via API](#backblaze-api)
 
 # slack channel notifications
 
@@ -556,4 +557,204 @@ tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util max:
 279.00 279.00 194312.87 57968.00 914.07 2.34 11.32 1.06
 tps rd_sec/s wr_sec/s avgrq-sz avgqu-sz await svctm %util 95%:
 231.06 231.06 181390.35 55487.20 910.22 1.20 5.81 0.88
+```
+
+# backblaze api
+
+`cpanel-backup.sh` optionally supports uploading backed up cPanel files to Backblaze API
+
+```
+# backblaze api settings
+BB_ENABLE='n'
+BB_DEBUG='n'
+BB_APPKEYID=''
+BB_APPKEY=''
+```
+
+example excerpt from backblaze API upload routine section with `BB_DEBUG='y'` set for more verbose output
+
+```
+--------------------------------------------------------
+List cpuser2 backups at /home/backup-accounts/cpuser2
+--------------------------------------------------------
+
++-- [  76]  cronjobs-cpuser2-040719-193257.txt
++-- [ 190]  domain-map-cpuser2-040719-193257.json
++-- [ 533]  domain-map-cpuser2-040719-193257.txt
++-- [ 115]  mail-cpuser2-040719-193257.tar.zst
++-- [ 529]  mysqlbackup-cpuser2_db1-040719-193257.sql.zst
++-- [ 528]  mysqlbackup-cpuser2_db2-040719-193257.sql.zst
++-- [ 528]  mysqlbackup-cpuser2_db3-040719-193257.sql.zst
++-- [ 835]  mysql-grants-040719-193257.log
++-- [ 861]  mysql-grants-ssh-040719-193257.log
++-- [4.0K]  named
+|   +-- [   0]  ads.domain2.com-040719-193257.db
+|   +-- [   0]  domain2.biz-040719-193257.db
+|   +-- [   0]  domain2.com-040719-193257.db
+|   +-- [   0]  domain2.info-040719-193257.db
+|   +-- [   0]  m.domain2.com-040719-193257.db
++-- [ 122]  public_html-cpuser2-040719-193257.tar.zst
++-- [561K]  repositories-cpuser2-040719-193257.tar.zst
++-- [  88]  ssl-cpuser2-040719-193257.tar.zst
+
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/domain-map-cpuser2-040719-193257.txt cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.txt
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/domain-map-cpuser2-040719-193257.txt: 100%|██████████| 533/533 [00:01<00:00 356B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.txt 
+  size: 533 
+  uploadTimestamp: 1562268783000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db1-040719-193257.sql.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db1-040719-193257.sql.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db1-040719-193257.sql.zst: 100%|██████████| 529/529 [00:01<00:00 334B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db1-040719-193257.sql.zst 
+  size: 529 
+  uploadTimestamp: 1562268785000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/cronjobs-cpuser2-040719-193257.txt cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/cronjobs-cpuser2-040719-193257.txt
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/cronjobs-cpuser2-040719-193257.txt: 100%|██████████| 76.0/76.0 [00:01<00:00 50.5B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/cronjobs-cpuser2-040719-193257.txt 
+  size: 76 
+  uploadTimestamp: 1562268788000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mysql-grants-ssh-040719-193257.log cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-ssh-040719-193257.log
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mysql-grants-ssh-040719-193257.log: 100%|██████████| 861/861 [00:01<00:00 544B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-ssh-040719-193257.log 
+  size: 861 
+  uploadTimestamp: 1562268790000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db3-040719-193257.sql.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db3-040719-193257.sql.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db3-040719-193257.sql.zst: 100%|██████████| 528/528 [00:01<00:00 377B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db3-040719-193257.sql.zst 
+  size: 528 
+  uploadTimestamp: 1562268793000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/ssl-cpuser2-040719-193257.tar.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/ssl-cpuser2-040719-193257.tar.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/ssl-cpuser2-040719-193257.tar.zst: 100%|██████████| 88.0/88.0 [00:01<00:00 61.5B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/ssl-cpuser2-040719-193257.tar.zst 
+  size: 88 
+  uploadTimestamp: 1562268795000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mail-cpuser2-040719-193257.tar.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mail-cpuser2-040719-193257.tar.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mail-cpuser2-040719-193257.tar.zst: 100%|██████████| 115/115 [00:01<00:00 73.6B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mail-cpuser2-040719-193257.tar.zst 
+  size: 115 
+  uploadTimestamp: 1562268798000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/domain-map-cpuser2-040719-193257.json cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.json
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/domain-map-cpuser2-040719-193257.json: 100%|██████████| 190/190 [00:01<00:00 136B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.json 
+  size: 190 
+  uploadTimestamp: 1562268800000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/public_html-cpuser2-040719-193257.tar.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/public_html-cpuser2-040719-193257.tar.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/public_html-cpuser2-040719-193257.tar.zst: 100%|██████████| 122/122 [00:01<00:00 86.6B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/public_html-cpuser2-040719-193257.tar.zst 
+  size: 122 
+  uploadTimestamp: 1562268803000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db2-040719-193257.sql.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db2-040719-193257.sql.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mysqlbackup-cpuser2_db2-040719-193257.sql.zst: 100%|██████████| 528/528 [00:01<00:00 369B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db2-040719-193257.sql.zst 
+  size: 528 
+  uploadTimestamp: 1562268808000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/repositories-cpuser2-040719-193257.tar.zst cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/repositories-cpuser2-040719-193257.tar.zst
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/repositories-cpuser2-040719-193257.tar.zst: 100%|██████████| 574k/574k [00:03<00:00 190kB/s]  
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/repositories-cpuser2-040719-193257.tar.zst 
+  size: 574302 
+  uploadTimestamp: 1562268810000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/mysql-grants-040719-193257.log cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-040719-193257.log
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/mysql-grants-040719-193257.log: 100%|██████████| 835/835 [00:01<00:00 617B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-040719-193257.log 
+  size: 835 
+  uploadTimestamp: 1562268814000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/named/domain2.info-040719-193257.db cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.info-040719-193257.db
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/named/domain2.info-040719-193257.db: 0.00B [00:00 ?B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.info-040719-193257.db 
+  size: 0 
+  uploadTimestamp: 1562268816000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/named/domain2.com-040719-193257.db cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.com-040719-193257.db
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/named/domain2.com-040719-193257.db: 0.00B [00:00 ?B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.com-040719-193257.db 
+  size: 0 
+  uploadTimestamp: 1562268832000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/named/m.domain2.com-040719-193257.db cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/m.domain2.com-040719-193257.db
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/named/m.domain2.com-040719-193257.db: 0.00B [00:00 ?B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/m.domain2.com-040719-193257.db 
+  size: 0 
+  uploadTimestamp: 1562268834000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/named/domain2.biz-040719-193257.db cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.biz-040719-193257.db
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/named/domain2.biz-040719-193257.db: 0.00B [00:00 ?B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.biz-040719-193257.db 
+  size: 0 
+  uploadTimestamp: 1562268836000
+--------------------------------------------------------
+b2 upload_file --threads 2 B2BUCKETNAME /home/backup-accounts/cpuser2/named/ads.domain2.com-040719-193257.db cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/ads.domain2.com-040719-193257.db
+--------------------------------------------------------
+
+/home/backup-accounts/cpuser2/named/ads.domain2.com-040719-193257.db: 0.00B [00:00 ?B/s]
+  fileName: cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/ads.domain2.com-040719-193257.db 
+  size: 0 
+  uploadTimestamp: 1562268840000
+
+```
+```
+--------------------------------------------------------
+list b2 bucket uploaded files
+--------------------------------------------------------
+
+2019-07-04  19:33:08  76      cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/cronjobs-cpuser2-040719-193257.txt
+2019-07-04  19:33:20  190     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.json
+2019-07-04  19:33:03  533     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/domain-map-cpuser2-040719-193257.txt
+2019-07-04  19:33:18  115     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mail-cpuser2-040719-193257.tar.zst
+2019-07-04  19:33:34  835     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-040719-193257.log
+2019-07-04  19:33:10  861     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysql-grants-ssh-040719-193257.log
+2019-07-04  19:33:05  529     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db1-040719-193257.sql.zst
+2019-07-04  19:33:28  528     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db2-040719-193257.sql.zst
+2019-07-04  19:33:13  528     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/mysqlbackup-cpuser2_db3-040719-193257.sql.zst
+2019-07-04  19:34:00  0       cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/ads.domain2.com-040719-193257.db
+2019-07-04  19:33:56  0       cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.biz-040719-193257.db
+2019-07-04  19:33:52  0       cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.com-040719-193257.db
+2019-07-04  19:33:36  0       cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/domain2.info-040719-193257.db
+2019-07-04  19:33:54  0       cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/named/m.domain2.com-040719-193257.db
+2019-07-04  19:33:23  122     cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/public_html-cpuser2-040719-193257.tar.zst
+2019-07-04  19:33:30  574302  cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/repositories-cpuser2-040719-193257.tar.zst
+2019-07-04  19:33:15  88      cpanelhost.domain.com/cpanel-backup/cpuser2/040719-193257/ssl-cpuser2-040719-193257.tar.zst
 ```
