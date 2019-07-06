@@ -17,6 +17,7 @@
 * `cpanel-backup.sh` will backup cPanel user's domain mapping for main domain, subdomains, parked domains, git repositories, cronjobs and DNS zone files if they exist.
 * `cpanel-backup.sh` will also optionally sending slack channel notifications on successful or failed backup targets i.e. public_html, mail, logs, ssl or database backups. All notifications are colour coded - green = successful or red = failed for backup status for each backup target. This allows quick visual inspection of which backup targets failed their backup runs.
 * `cpanel-backup.sh` optionally can upload backed up files to [BackBlaze via API](#backblaze-api)
+* first comparison [test run of `cpanel-backup.sh` vs cPanel pkgacct backup methods](https://github.com/centminmod/cpanel-backup/blob/master/examples/cpanel-backup-vs-pkgacct-060719.md) show `cpanel-backup.sh` method being `~29.45%` faster + `~6.33%` smaller compressed backup files than cPanel native pkgacct method for a single cPanel user account of ~1.45GB in size for data files + MySQL databases for default set zstd compression levels in `cpanel-backup.sh`and `~21.26%` faster than cPanel pkgacct when using higher zstd compression levels in `cpanel-backup.sh` + `12.88%` smaller compressed file backups than pkgacct method
 
 # slack channel notifications
 
