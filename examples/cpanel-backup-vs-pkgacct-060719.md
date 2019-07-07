@@ -2,7 +2,10 @@
 
 Below is example run on CentOS 6 cPanel/WHM server testing overall backup speed and compression speed/ratio performance between cPanel native pkgacct versus cpanel-backup.sh backup methods. cPanel pkgacct account method does backup more items than cpanel-backup.sh which can also factor into the size despite zstd compression ratio being more efficient than cPanel's use of gzip via multi-threaded pigz compression algorithm. However, the purpose of cpanel-backup.sh is for speed and compression ratio efficiency for data migration from cPanel/WHM as part of the importer process for importing into [Centmin Mod LEMP stack](https://centminmod.com/) in light of [cPanel announced price increase and licensing changes](https://community.centminmod.com/threads/17849/).
 
-Below example comparison is done on cPanel/WHM VPS server - 4 cpu KVM VPS running CentOS 6 shows cpanel-backup.sh method being `~29.45%` faster + `~6.33%` smaller compressed backup files than cPanel native pkgacct method for a single cPanel user account of ~1.45GB in size for data files + MySQL databases for default set zstd compression levels in cpanel-backup.sh and `~21.26%` faster than cPanel pkgacct when using higher zstd compression levels in cpanel-backup.sh + `12.88%` smaller compressed file backups than pkgacct method.
+Below example comparison is done on cPanel/WHM VPS server - 4 cpu KVM VPS running CentOS 6 shows:
+
+* cpanel-backup.sh method being `~29.45%` faster + `~6.33%` smaller compressed backup files than cPanel native pkgacct method for a single cPanel user account of ~1.45GB in size for data files + MySQL databases for default set zstd compression levels in cpanel-backup.sh and 
+* `~21.26%` faster than cPanel pkgacct when using higher zstd compression levels in cpanel-backup.sh + `12.88%` smaller compressed file backups than pkgacct method.
 
 Where `/home/cpuser1` size wise is ~205 MB for files and ~1.25GB for MySQL databases
 
@@ -16,13 +19,26 @@ du -s /var/lib/mysql/cpuser1*
 76424   /var/lib/mysql/cpuser1_db3
 ```
 
+# contents
+
+* [backup times compared](#backup-times-compared)
+* [backup sizes compared](#backup-sizes-compared)
+* [cpu load averages](#cpu-load-averages)
+* [cpu utilisation](#cpu-utilisation)
+* [memory usage](#memory-usage)
+* [disk I/O usage](#disk-io-usage)
+* [cpanel-backup.sh usage options](#cpanel-backupsh-usage-options)
+* [pkgacct backup run](#pkgacct-backup-run)
+* [cpanel-backup.sh default run](#cpanel-backupsh-backup-run)
+* [cpanel-backup.sh higher compression level run](#cpanel-backupsh-higher-compression-level-backup-run)
+
 ## backup times compared
 
 * cPanel pkgacct backup time = 110.644 seconds. If you had 100 such cPanel accounts, total backup time would be = 100 x 110.644 seconds = 184.41 minutes
 * cpanel-backup.sh backup time = 78.055 seconds `~29.45%` faster. If you had 100 such cPanel accounts, total backup time would be = 100 x 78.055 seconds = 130.09 minutes. Thus saving you ~54.32 minutes compared to pkgacct process.
 * cpanel-backup higher zstd level 9 compression backup time = 87.123 seconds `21.26%` faster than pkgacct backup method and `11.62%` slower than default cpanel-backup.sh zstd compression levels set. If you had 100 such cPanel accounts, total backup time would be = 100 x 87.123 seconds = 145.205 minutes. Thus saving you ~39.205 minutes compared to pkgacct process.
 
-## back up sizes compared
+## backup sizes compared
 
 * cPanel pkgacct backup size = 489 MB. 100 such cPanel accounts would take = 100 x 489MB = 47.754 GB of disk space.
 * cpanel-backup.sh backup size = 947M - 489M = 458 MB `~6.33%` smaller. 100 such cPanel accounts would take = 100x 458MB = 44.727 GB of disk space - ~ 3.027GB less than pkgacct process.
